@@ -931,7 +931,7 @@ public class ConceptServiceTest extends BaseContextSensitiveTest {
 	public void getDrugIngredientByUuid_shouldFindObjectGivenValidUuid() {
 		String uuid = "6519d653-393d-4118-9c83-a3715b82d4dc";
 		DrugIngredient ingredient = Context.getConceptService().getDrugIngredientByUuid(uuid);
-		Assert.assertEquals(88, (int) ingredient.getIngredient().getConceptId());
+		Assert.assertEquals(88, (int) ingredient.getDrugIngredientId().getIngredient().getConceptId());
 	}
 	
 	/**

@@ -9,22 +9,84 @@
  */
 package org.openmrs;
 
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+import java.io.Serializable;
+
 /**
  * DrugIngredient
  */
+@Entity
+@Table(name = "drug_ingredient")
 public class DrugIngredient extends BaseOpenmrsObject implements java.io.Serializable, OpenmrsObject {
-	
+
 	public static final long serialVersionUID = 94023L;
-	
+
 	// Fields
-	
-	private Drug drug;
-	
-	private Concept ingredient;
-	
+
+	@EmbeddedId
+	private PK drugIngredientId;
+
+	@Column(name = "strength")
 	private Double strength;
-	
+
+	@ManyToOne
+	@JoinColumn(name = "units", insertable = false, updatable = false)
 	private Concept units;
+
+	@Embeddable
+	public class PK implements Serializable {
+
+		@ManyToOne
+		@JoinColumn(name = "drug_id", insertable = false, updatable = false, nullable = false)
+		private Drug drug;
+
+		@ManyToOne
+		@JoinColumn(name = "ingredient_id", insertable = false, updatable = false, nullable = false)
+		private Concept ingredient;
+
+		public PK() {
+		}
+
+		public PK(Drug drug, Concept ingredient) {
+			this.drug = drug;
+			this.ingredient = ingredient;
+		}
+
+		/**
+		 * @return the drug
+		 */
+		public Drug getDrug() {
+			return drug;
+		}
+
+		/**
+		 * @param drug the drug to set
+		 */
+		public void setDrug(Drug drug) {
+			this.drug = drug;
+		}
+
+		/**
+		 * @return Returns the ingredient.
+		 */
+		public Concept getIngredient() {
+			return ingredient;
+		}
+
+		/**
+		 * @param ingredient The ingredient to set.
+		 */
+		public void setIngredient(Concept ingredient) {
+			this.ingredient = ingredient;
+		}
+	}
 	
 	// Constructors
 	
@@ -33,34 +95,6 @@ public class DrugIngredient extends BaseOpenmrsObject implements java.io.Seriali
 	}
 	
 	// Property accessors
-	
-	/**
-	 * @return the drug
-	 */
-	public Drug getDrug() {
-		return drug;
-	}
-	
-	/**
-	 * @param drug the drug to set
-	 */
-	public void setDrug(Drug drug) {
-		this.drug = drug;
-	}
-	
-	/**
-	 * @return Returns the ingredient.
-	 */
-	public Concept getIngredient() {
-		return ingredient;
-	}
-	
-	/**
-	 * @param ingredient The ingredient to set.
-	 */
-	public void setIngredient(Concept ingredient) {
-		this.ingredient = ingredient;
-	}
 	
 	/**
 	 * @return Returns the strength.
@@ -111,5 +145,8 @@ public class DrugIngredient extends BaseOpenmrsObject implements java.io.Seriali
 	public void setId(Integer id) {
 		throw new UnsupportedOperationException();
 	}
-	
+
+	public PK getDrugIngredientId() {
+		return drugIngredientId;
+	}
 }
